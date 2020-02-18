@@ -19,6 +19,7 @@ import com.darko.themoviedbapp.R;
 import com.darko.themoviedbapp.datamodel.Movie;
 import com.darko.themoviedbapp.ui.DetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHolder> {
@@ -28,9 +29,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     private Context context;
     private List<Movie> movieList;
 
-    public MoviesAdapter(Context context, List<Movie> movieList) {
+    public MoviesAdapter(Context context) {
         this.context = context;
+        movieList = new ArrayList<>();
+    }
+
+    public void setMovieList(List<Movie> movieList) {
         this.movieList = movieList;
+        notifyItemInserted(movieList.size() - 1);
     }
 
     @NonNull

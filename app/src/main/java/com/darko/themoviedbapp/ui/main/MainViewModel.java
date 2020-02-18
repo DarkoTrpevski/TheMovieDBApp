@@ -1,6 +1,5 @@
 package com.darko.themoviedbapp.ui.main;
 
-
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -20,6 +19,7 @@ public class MainViewModel extends AndroidViewModel {
         super(application);
         movieRepository = MovieRepository.getInstance(application.getApplicationContext());
     }
+
     LiveData<List<Movie>> getAllMovies() {
         return movieRepository.getAllMovies();
     }

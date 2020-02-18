@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.darko.themoviedbapp.BuildConfig;
 import com.darko.themoviedbapp.datamodel.Movie;
 import com.darko.themoviedbapp.datamodel.MoviesResponse;
-import com.darko.themoviedbapp.network.Client;
-import com.darko.themoviedbapp.network.Service;
+import com.darko.themoviedbapp.network.MovieRetrofitClient;
+import com.darko.themoviedbapp.network.MovieRetrofitService;
 import com.darko.themoviedbapp.utils.NetworkUtils;
 
 import java.util.ArrayList;
@@ -62,8 +62,8 @@ public class MovieRepository {
     }
 
     private LiveData<List<Movie>> getMovieListFromApi() {
-        Service apiService = Client.getClient().create(Service.class);
-        Call<MoviesResponse> call = apiService.getPopularMovies(BuildConfig.THE_MOVIE_DB_API_TOKEN);
+        MovieRetrofitService apiMovieRetrofitService = MovieRetrofitClient.getClient().create(MovieRetrofitService.class);
+        Call<MoviesResponse> call = apiMovieRetrofitService.getPopularMovies(BuildConfig.THE_MOVIE_DB_API_TOKEN);
         call.enqueue(new Callback<MoviesResponse>() {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
@@ -84,17 +84,6 @@ public class MovieRepository {
         });
         return mutableLiveData;
     }
-
-
-//    //THIS METHOD HAS A PARAMETER LIST OF MOVIES THAT IT PASSES IT TO THE DATABASE
-//    public void addMoviesToDB(final List<Movie> movies) {
-//        executor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                database.movieDao().insertAllMovies(movies);
-//            }
-//        });
-//    }
 
     private LiveData<List<Movie>> getMovieListFromDB() {
         return database.movieDao().getAllMovies();

@@ -3,7 +3,7 @@ package com.darko.themoviedbapp.network;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Client {
+public class MovieRetrofitClient {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static Retrofit retrofit = null;

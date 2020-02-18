@@ -22,8 +22,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "MainActivity";
-    private List<Movie> movieList;
+    public static final String TAG = "MainActivityTAG";
 
     private RecyclerView recyclerView;
     private MoviesAdapter moviesAdapter;
@@ -40,32 +39,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecyclerAndViewModel() {
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        moviesAdapter = new MoviesAdapter(this);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         getPopularMovies();
     }
 
     //OBSERVE CHANGES TO THE VIEW MODEL
     private void getPopularMovies() {
         try {
-            Observer<List<Movie>> observer = new Observer<List<Movie>>() {
+            //WE WILL OBSERVE THE NOTES(SUBSCRIBED TO THE DATA)
+            mainViewModel.getAllMovies().observe(this, new Observer<List<Movie>>() {
                 @Override
                 public void onChanged(List<Movie> moviesFromLiveData) {
-                    if (movieList != null) {
-                        movieList.clear();
-                        movieList = moviesFromLiveData;
-                        showOnRecyclerAndUpdateDB();
-                    } else {
-                        movieList = moviesFromLiveData;
-                        showOnRecyclerAndUpdateDB();
-                    }
+                    moviesAdapter.setMovieList(moviesFromLiveData);
+                    showOnRecyclerAndUpdateDB();
                 }
-            };
-            //WE WILL OBSERVE THE NOTES(SUBSCRIBED TO THE DATA)
-            mainViewModel.getAllMovies().observe(this, observer);
+            });
+
         } catch (Exception e) {
             Log.d(TAG, "loadMoviesFromAPI: Error" + e.getMessage());
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -74,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showOnRecyclerAndUpdateDB() {
-        moviesAdapter = new MoviesAdapter(this, movieList);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         } else {
@@ -82,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         }
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(moviesAdapter);
-        moviesAdapter.notifyDataSetChanged();
     }
 
     //CREATE MENU

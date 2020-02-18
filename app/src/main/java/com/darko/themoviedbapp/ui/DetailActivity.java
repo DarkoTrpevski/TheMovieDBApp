@@ -18,8 +18,8 @@ import com.bumptech.glide.Glide;
 import com.darko.themoviedbapp.BuildConfig;
 import com.darko.themoviedbapp.R;
 import com.darko.themoviedbapp.ui.main.adapter.TrailerAdapter;
-import com.darko.themoviedbapp.network.Client;
-import com.darko.themoviedbapp.network.Service;
+import com.darko.themoviedbapp.network.MovieRetrofitClient;
+import com.darko.themoviedbapp.network.MovieRetrofitService;
 import com.darko.themoviedbapp.datamodel.Trailer;
 import com.darko.themoviedbapp.datamodel.TrailerResponse;
 import com.google.android.material.appbar.AppBarLayout;
@@ -121,9 +121,9 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please obtain your API KEY", Toast.LENGTH_SHORT).show();
                 return;
             }
-//            Client client = new Client();
-            Service apiService = Client.getClient().create(Service.class);
-            Call<TrailerResponse> call = apiService.getMovieTrailer(movie_id,BuildConfig.THE_MOVIE_DB_API_TOKEN);
+//            MovieRetrofitClient client = new MovieRetrofitClient();
+            MovieRetrofitService apiMovieRetrofitService = MovieRetrofitClient.getClient().create(MovieRetrofitService.class);
+            Call<TrailerResponse> call = apiMovieRetrofitService.getMovieTrailer(movie_id,BuildConfig.THE_MOVIE_DB_API_TOKEN);
             call.enqueue(new Callback<TrailerResponse>() {
                 @Override
                 public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
